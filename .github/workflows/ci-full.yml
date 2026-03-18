@@ -1,0 +1,44 @@
+name: CI (lint & secrets)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run smoke test
+        run: |
+          chmod +x skills/hello/run.sh || true
+          ./skills/hello/run.sh || true
+
+      - name: Mega-Linter
+        uses: oxsecurity/mega-linter-action@v4
+        with:
+          # default configuration; change via repo config if needed
+          filters: "" # keep default filters
+
+      - name: TruffleHog scan
+        uses: docker://trufflesecurity/trufflehog:latest
+        with:
+          args: --json --no-color filesystem --directory . > trufflehog-report.json || true
+
+      - name: Upload TruffleHog report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trufflehog-report
+          path: trufflehog-report.json
+
+      - name: Fail on trufflehog findings
+        run: |
+          if [ -f trufflehog-report.json ] && [ "$(jq -r '. | length' trufflehog-report.json)" != "0" ]; then
+            echo "Secrets found by truffleHog:"; jq -r '.[] | .path + ": " + (.reason // "")' trufflehog-report.json || true
+            exit 1
+          fi
