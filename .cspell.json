@@ -1,0 +1,15 @@
+{
+  version: 0.1,
+  language: en,
+  words: [
+    Botiste,
+    openclaw,
+    trufflesecurity,
+    SEMGREP,
+    nvuillam,
+    __pycache__,
+    megalinter,
+    trufflehog,
+    mega-linter
+  ]
+}

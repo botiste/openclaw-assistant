@@ -1,3 +1,2 @@
 # Enable semgrep and default rules
-SEMGREP_ENABLE: true
 # Keep default linters; you can customize rules here
