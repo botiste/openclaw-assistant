@@ -1,0 +1,28 @@
+name: TruffleHog Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  trufflehog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run truffleHog (filesystem scan)
+        uses: docker://trufflesecurity/trufflehog:latest
+        with:
+          args: --json --no-color filesystem --directory . > trufflehog-report.json || true
+
+      - name: Fail on trufflehog findings
+        run: |
+          if [ -f trufflehog-report.json ] && [ "$(jq -r '. | length' trufflehog-report.json)" != "0" ]; then
+            echo "Secrets found by truffleHog:"; jq -r '.[] | "path: " + (.path // "") + " - reason: " + (.reason // "")' trufflehog-report.json || true
+            exit 1
+          fi
