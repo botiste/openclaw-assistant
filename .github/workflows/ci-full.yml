@@ -16,7 +16,8 @@ jobs:
       - name: Mega-Linter
         uses: nvuillam/mega-linter-action@v4
         with:
-          filters: "" # keep default filters
+          default_workdir: .
+          # keep defaults; enable semgrep explicitly
           SEMGREP_ENABLE: true
 
       - name: TruffleHog scan
