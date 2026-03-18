@@ -1,4 +1,6 @@
 name: CI (lint & secrets)
+permissions:
+  contents: read
 
 on:
   push:
