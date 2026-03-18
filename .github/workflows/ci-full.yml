@@ -13,11 +13,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run smoke test
-        run: |
-          chmod +x skills/hello/run.sh || true
-          ./skills/hello/run.sh || true
-
       - name: Mega-Linter
         uses: oxsecurity/mega-linter-action@v4
         with:
