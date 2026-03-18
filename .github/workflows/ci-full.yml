@@ -14,10 +14,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Mega-Linter
-        uses: oxsecurity/mega-linter-action@v4
+        uses: nvuillam/mega-linter-action@v4
         with:
-          # default configuration; change via repo config if needed
           filters: "" # keep default filters
+          SEMGREP_ENABLE: true
 
       - name: TruffleHog scan
         uses: docker://trufflesecurity/trufflehog:latest
