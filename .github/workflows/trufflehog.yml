@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Run truffleHog (filesystem scan)
-        uses: docker://trufflesecurity/trufflehog:latest
+        uses: docker://trufflesecurity/trufflehog@sha256:3af601f1c18e653fa05c18c652d61d2a624be7d037b927499f469d5ad3e18a11
         with:
           args: --json --no-color filesystem --directory . > trufflehog-report.json || true
 
